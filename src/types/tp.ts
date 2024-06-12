@@ -1,0 +1,1 @@
+type typeTp = "Balise" | "Nexus" | "Défi" | "Donjon" | "Royaume Fantôme" | "Tour Éprouvante" | "Boss" | "Hotel de ville"
