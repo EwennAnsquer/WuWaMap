@@ -1,0 +1,1 @@
+type element = "Havoc" | "Electro" | "Fusion" | "Spectro" | "Aero" | "Glacio";
