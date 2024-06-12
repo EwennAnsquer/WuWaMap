@@ -1,11 +1,13 @@
-import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet'
+import { MapContainer, TileLayer, Marker, useMapEvents, Polyline } from 'react-leaflet'
 
 import './map.css'
 import 'leaflet/dist/leaflet.css'
 import L from 'leaflet'
+import { PathOptions } from 'leaflet'
 
 import mob from '../../class/mob'
 import tp from '../../class/tp'
+import line from '../../class/line'
 
 import '../../data'
 
@@ -22,27 +24,34 @@ function map() {
     return null;
   };
 
+  tp.coll[0].distanceToAllMobs();
+
   return (
     <MapContainer center={[-128,128]} zoom={2} crs={L.CRS.Simple} minZoom={0} maxZoom={6} maxBoundsViscosity={1.0} id='map'>
         <TileLayer
           url="/tiles/{z}/{x}/{y}.png"
         />
-        {tp.tpColl.map((t, index)=>{
+        {tp.coll.map((t, index)=>{
           return (
             <Marker 
-              key={index} 
+              key={"tp"+index} 
               position={[t.x,t.y]}
               icon={t.createIcon()}>
             </Marker>
           )
         })}
-        {mob.mobColl.map((m, index)=>{
+        {mob.coll.map((m, index)=>{
           return (
             <Marker 
-              key={index} 
+              key={"mob"+index} 
               position={[m.x,m.y]}
               icon={m.createIcon()}>
             </Marker>
+          )
+        })}
+        {line.coll.map((l, index)=>{
+          return (
+            <Polyline key={"line"+index} positions={l.positions} pathOptions={ {color: line.color} }/>
           )
         })}
         <LocationMarker />
