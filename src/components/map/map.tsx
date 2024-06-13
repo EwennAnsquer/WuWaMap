@@ -3,11 +3,11 @@ import { MapContainer, TileLayer, Marker, useMapEvents, Polyline } from 'react-l
 import './map.css'
 import 'leaflet/dist/leaflet.css'
 import L from 'leaflet'
-import { PathOptions } from 'leaflet'
 
 import mob from '../../class/mob'
 import tp from '../../class/tp'
 import line from '../../class/line'
+import marker from '../../class/marker'
 
 import '../../data'
 
@@ -20,11 +20,16 @@ function map() {
         alert(`Coordinates: ${lat}, ${lng}`);
       },
     });
-
     return null;
   };
 
-  tp.coll[0].distanceToAllMobs();
+  marker.createMatrice()
+
+  tp.coll.forEach(tp=>{
+    tp.getNearestMobs().forEach(id=>{
+      new line(tp.createPolyline(mob.getMobById(id)))
+    })
+  })
 
   return (
     <MapContainer center={[-128,128]} zoom={2} crs={L.CRS.Simple} minZoom={0} maxZoom={6} maxBoundsViscosity={1.0} id='map'>
