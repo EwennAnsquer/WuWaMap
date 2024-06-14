@@ -60,6 +60,7 @@ const tpData = [
     { type: "Balise" as typeTp, icon: "/icones/Petite_Balise.png", x: -153.34, y: 100.47, z: -179 },
     { type: "Balise" as typeTp, icon: "/icones/Petite_Balise.png", x: -156.81, y: 102.11, z: -13 },
     { type: "Balise" as typeTp, icon: "/icones/Petite_Balise.png", x: -164.14, y: 51.78, z: 34 },
+    { type: "Balise" as typeTp, icon: "/icones/Petite_Balise.png", x: -200.64, y: 106.36, z: 74 },
     { type: "Défi" as typeTp, icon: "/icones/Défi.png", x: -111.29, y: 90.11, z: 5 },
     { type: "Défi" as typeTp, icon: "/icones/Défi.png", x: -159.56, y: 57.59, z: 5 },
     { type: "Défi" as typeTp, icon: "/icones/Défi.png", x: -186.81, y: 62.03, z: 21 },
@@ -166,6 +167,7 @@ const mobData = [
     { name: "Loup Havocrinière", icon:"/icones/Loup_Havocrinière.png", x: -214.33, y: 93.73, z: 41, cost: 3 as cost, element: "Havoc" as element },
     { name: "Loup Havocrinière", icon:"/icones/Loup_Havocrinière.png", x: -202.48, y: 69.48, z: 41, cost: 3 as cost, element: "Havoc" as element },
     { name: "Loup Havocrinière", icon:"/icones/Loup_Havocrinière.png", x: -163.11, y: 87.55, z: 58, cost: 3 as cost, element: "Havoc" as element },
+    { name: "Loup Havocrinière", icon:"/icones/Loup_Havocrinière.png", x: -201.02, y: 110.92, z: 58, cost: 3 as cost, element: "Havoc" as element },
     { name: "Héron violet", icon:"/icones/Héron_violet.png", x: -67.73, y: 87.52, z: 208, cost: 3 as cost, element: "Electro" as element },
     { name: "Héron violet", icon:"/icones/Héron_violet.png", x: -58.98, y: 86.31, z: 288, cost: 3 as cost, element: "Electro" as element },
     { name: "Héron violet", icon:"/icones/Héron_violet.png", x: -54.94, y: 86.97, z: 336, cost: 3 as cost, element: "Electro" as element },
@@ -199,6 +201,7 @@ const mobData = [
     { name: "Flûtiste", icon:"/icones/Flûtiste.png", x: -34.77, y: 136.55, z: 3, cost: 3 as cost, element: "Electro" as element},
     { name: "Flûtiste", icon:"/icones/Flûtiste.png", x: -31.27, y: 146.13, z: 2, cost: 3 as cost, element: "Electro" as element},
     { name: "Flûtiste", icon:"/icones/Flûtiste.png", x: -24.97, y: 130.34, z: 2, cost: 3 as cost, element: "Electro" as element},
+    { name: "Flûtiste", icon:"/icones/Flûtiste.png", x: -30.06, y: 139.06, z: 3, cost: 3 as cost, element: "Electro" as element},
 ];
 
 tpData.map(data => new tp(data.type, data.icon, data.x, data.y, data.z));
