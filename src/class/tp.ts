@@ -1,4 +1,4 @@
-import { Icon, LatLngExpression, LatLngTuple } from 'leaflet'
+import { Icon } from 'leaflet'
 
 import markerInterface from '../interface/markerInterface';
 import tpInterface from '../interface/tpInterface';
@@ -10,6 +10,8 @@ export default class TP implements marker,markerInterface,tpInterface{
 
     public static coll:TP[] = [];
     public id:number;
+    public done:boolean = false;
+    public linkTo:mob[] = [];
 
     constructor(public type:typeTp, public imageLink:string, public x:number, public y:number, public z:number){
         this.id=TP.coll.length;
@@ -20,17 +22,11 @@ export default class TP implements marker,markerInterface,tpInterface{
     public createIcon() {
         const icon = new Icon({
             iconUrl: this.imageLink,
-            iconSize: [40,40]
+            iconSize: [40,40],
+            // className: "truc",
         })
 
         return icon;
-    }
-
-    public createPolyline(mob:mob): LatLngExpression[] {
-        return [
-            [this.x, this.y] as LatLngTuple,
-            [mob.x, mob.y] as LatLngTuple
-        ]
     }
 
     public distanceTo(mob:mob):number{
