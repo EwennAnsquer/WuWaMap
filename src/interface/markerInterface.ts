@@ -4,6 +4,7 @@ interface markerInterface{
     x:number;
     y:number;
     z:number;
+    done:boolean;
 }
 
 export default markerInterface;
