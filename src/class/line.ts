@@ -4,6 +4,7 @@ import lineInterface from "../interface/lineInterface"
 
 import TP from './tp';
 import mob from './mob';
+import marker from './marker';
 
 export default class line implements lineInterface{
     public static coll:line[] = [];
@@ -15,7 +16,7 @@ export default class line implements lineInterface{
     public id:number;
     public positions: LatLngExpression[] = [];
 
-    constructor(public elTo:mob|TP, public elFrom:mob){
+    constructor(public begin:mob|TP, public end:mob|TP){
         this.id=line.coll.length;
         line.coll.push(this);
         this.createPolyline();
@@ -23,12 +24,19 @@ export default class line implements lineInterface{
     }
 
     public createPolyline() {
-        this.positions.push([this.elTo.x, this.elTo.y] as LatLngTuple)
-        this.positions.push([this.elFrom.x, this.elFrom.y] as LatLngTuple)
+        this.positions.push([this.begin.x, this.begin.y] as LatLngTuple)
+        this.positions.push([this.end.x, this.end.y] as LatLngTuple)
     }
 
     public writeLinks(){
-        this.elTo.linkTo.push(this.elFrom)
-        this.elFrom.linkFrom.push(this.elTo)
+        marker.linkMatrice[this.begin.id][this.end.id]+=1;
+    }
+
+    public static deleteLine(begin:mob|TP, end:mob){
+        line.coll.forEach((l,index)=>{
+            if(l.begin == begin && l.end == end){
+                line.coll.splice(index,1)
+            }
+        })
     }
 }

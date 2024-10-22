@@ -11,12 +11,22 @@ export default class TP implements marker,markerInterface,tpInterface{
     public static coll:TP[] = [];
     public id:number;
     public done:boolean = false;
-    public linkTo:mob[] = [];
 
     constructor(public type:typeTp, public imageLink:string, public x:number, public y:number, public z:number){
-        this.id=TP.coll.length;
+        this.id=marker.coll.length;
         TP.coll.push(this);
         marker.coll.push(this);
+        if(localStorage.getItem(String(this.id))){
+            if(localStorage.getItem("lastChangement")){
+                const date = new Date();
+                date.setHours(4,0,0,0)
+                if(new Date(localStorage.getItem("lastChangement") as string) < date){
+                    localStorage.removeItem(String(this.id))
+                }
+            }else{
+                this.done = JSON.parse(localStorage.getItem(String(this.id)) as string)
+            }
+        }
     }
 
     public createIcon() {
@@ -29,38 +39,28 @@ export default class TP implements marker,markerInterface,tpInterface{
         return icon;
     }
 
-    public distanceTo(mob:mob):number{
-        const dx = this.x - mob.x;
-        const dy = this.y - mob.y;
+    public distanceTo(el:mob|TP):number{
+        const dx = this.x - el.x;
+        const dy = this.y - el.y;
         return Math.sqrt(dx * dx + dy * dy);
     }
 
-    public slopeDistanceTo(mob: mob): number { //permet de calculer la distance entre deux points en prenant en compte la différence de hauteur
-        const dx = this.x - mob.x;
-        const dy = this.y - mob.y;
-        const dz = this.z - mob.z;
-        return Math.sqrt(dx * dx + dy * dy + dz * dz);
-    }
-
-    public slopePercentageTo(mob: mob): number { //permet de calculer la raideur de la pente entre deux points
-        const horizontalDistance = this.distanceTo(mob);
-        const heightDifference = this.z - mob.z;
-        return (heightDifference / horizontalDistance) * 100;
+    public slopeDistanceTo(el:mob|TP): number { //permet de calculer la distance entre deux points en prenant en compte la différence de hauteur
+        let distance = this.distanceTo(el)
+        if(this.z+10<el.z){
+            distance+=(el.z-this.z-10)*0.15
+        }
+        return distance
     }
 
     public distanceToAll():number[]{
         let table:number[] = [];
-        mob.coll.forEach(m => {
-            table.push(this.distanceTo(m))
+        TP.coll.forEach(tp=> {
+            table.push(this.slopeDistanceTo(tp))
         });
-        return table;
-    }
-
-    public slopePercentageToAll():number[]{
-        let table:number[] = [];
         mob.coll.forEach(m => {
-            table.push(this.slopePercentageTo(m))
-        })
+            table.push(this.slopeDistanceTo(m))
+        });
         return table;
     }
 
@@ -70,28 +70,50 @@ export default class TP implements marker,markerInterface,tpInterface{
         return table;
     }
 
-    public static createSlopePercentageMatrice(){
-        let table:number[][] = [];
-        TP.coll.forEach(tp => table.push(tp.slopePercentageToAll()))
+    public getNearestMobs(){
+        let table:mob[] = [];
+
+        mob.coll.forEach(m=>{
+            let isSmaller = true;
+            TP.coll.forEach(tp=>{
+                if(marker.distanceMatrice[tp.id][m.id]<marker.distanceMatrice[this.id][m.id]){
+                    isSmaller = false;
+                }
+            })
+            if(isSmaller) table.push(m)
+        })
+
+        // table.forEach(m=>{
+        //     let allDistances = marker.distanceMatrice[m.id]
+        //     let filter = allDistances.filter(value => value !== -1)
+        //     let minDistance = Math.min(...filter)
+        //     let index = allDistances.indexOf(minDistance)
+        //     if(marker.coll[index] !== this){
+        //         table = table.filter(mob => mob !== m)
+        //     }
+        // })
+
         return table;
     }
 
-    public getNearestMobs(){
-        let idTable:number[] = [];
+    public getMarkerLinkTo(){
+        let table:(mob|TP)[] = [];
+        marker.linkMatrice[this.id].forEach((e,index)=>{
+            if(e!=0){
+                table.push(marker.coll[index])
+            }
+        })
+        return table;
+    }
 
-        for (let i = 0; i < marker.distanceMatrice[this.id].length; i++) {
-            let isSmaller = true;
-            marker.distanceMatrice.forEach((e,f)=>{
-                if(f<TP.coll.length){
-                    if(e[i]<marker.distanceMatrice[this.id][i]){
-                        isSmaller = false;
-                    }
-                }
-            })
-            if(isSmaller) idTable.push(i)
+    public getMarkerLinkFrom(){
+        let table:(mob|TP)[] = [];
+        for (let index = 0; index < marker.linkMatrice.length; index++) {
+            if(marker.linkMatrice[index][this.id] != -1){
+                table.push(marker.coll[index])
+            }
         }
-
-        return idTable;
+        return table;
     }
 
     public toString():string {
