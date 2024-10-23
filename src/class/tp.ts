@@ -33,7 +33,6 @@ export default class TP implements marker,markerInterface,tpInterface{
         const icon = new Icon({
             iconUrl: this.imageLink,
             iconSize: [40,40],
-            // className: "truc",
         })
 
         return icon;

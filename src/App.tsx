@@ -1,16 +1,28 @@
-import './App.css'
+import { useState, useCallback } from 'react';
+import './App.css';
 
-import Map from './components/map/map'
-import ColumnBar from './components/columnBar/columnBar'
+import Map from './components/map/map';
+import ColumnBar from './components/columnBar/columnBar';
 
 function App() {
+  const [selectedMobs, setSelectedMobs] = useState<string[]>([]);
+
+  const handleMobSelectionChange = useCallback((newSelectedMobs: string[] | ((prev: string[]) => string[])) => {
+    setSelectedMobs(prev => {
+      const updated = typeof newSelectedMobs === 'function' ? newSelectedMobs(prev) : newSelectedMobs;
+      return updated;
+    });
+  }, []);
 
   return (
     <div className='App'>
-      <ColumnBar />
-      <Map />
+      <ColumnBar 
+        selectedMobs={selectedMobs} 
+        onMobSelectionChange={handleMobSelectionChange} 
+      />
+      <Map selectedMobs={selectedMobs} />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

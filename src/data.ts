@@ -1,7 +1,6 @@
-import mob from "./class/mob"
 import tp from "./class/tp"
 
-const tpData = [
+export const tpData = [
     { type: "Nexus" as typeTp, icon: "/icones/Nexus.png", x: -116.35, y: 88.62, z: 16 },
     { type: "Nexus" as typeTp, icon: "/icones/Nexus.png", x: -85.90, y: 86.11, z: 72 },
     { type: "Nexus" as typeTp, icon: "/icones/Nexus.png", x: -75.25, y: 90.45, z: 173 },
@@ -77,7 +76,7 @@ const tpData = [
     { type: "Boss" as typeTp, icon: "/icones/Frontière_chaotique_Cendres.png", x: -91.63, y: 86.60, z: 71 },
 ];
 
-const mobData = [
+export const mobData = [
     { name: "Tambourineur", icon:"/icones/Tambourineur.png", x: -160.92, y: 56.73, z: 1, cost: 3 as cost, element: "Havoc" as element },
     { name: "Tambourineur", icon:"/icones/Tambourineur.png", x: -161.22, y: 56.12, z: 13, cost: 3 as cost, element: "Havoc" as element },
     { name: "Tambourineur", icon:"/icones/Tambourineur.png", x: -160.25, y: 54.47, z: 13, cost: 3 as cost, element: "Havoc" as element },
@@ -208,4 +207,17 @@ const mobData = [
 ];
 
 tpData.map(data => new tp(data.type, data.icon, data.x, data.y, data.z));
-mobData.map(data => new mob(data.name, data.icon, data.x, data.y, data.z, data.cost, data.element));
+
+// Create an array of unique mob types with their names and image links
+export const mobTypes = Array.from(new Set(mobData.map((mob: MobData) => mob.name))).map(name => {
+    const foundMob: MobData | undefined = mobData.find((mob: MobData) => mob.name === name);
+    return {
+        name: name,
+        imageLink: foundMob ? foundMob.icon : '' // Provide a default icon
+    };
+});
+
+// Export a function to filter mobData
+export function filterMobData(selectedMobs: string[]) {
+    return mobData.filter(mob => selectedMobs.includes(mob.name));
+}
