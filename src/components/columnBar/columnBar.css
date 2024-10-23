@@ -1,0 +1,20 @@
+.columnBar{
+    z-index: 10;
+    grid-column: 1/2;
+    grid-row: 1/2;
+    position: relative;
+    background-color: rgb(05,28,36);
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.columnBar.closed{
+    transform: translateX(-100%);
+}
+
+.columnBar .closeOpenButton{
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translateX(100%);
+}
