@@ -1,4 +1,4 @@
-import { MapContainer, TileLayer, Marker, useMapEvents, Polyline, Popup } from 'react-leaflet'
+import { MapContainer, TileLayer, Marker, useMapEvents, Polyline, Popup, ZoomControl } from 'react-leaflet'
 
 import './map.css'
 import 'leaflet/dist/leaflet.css'
@@ -98,10 +98,11 @@ function map() {
     console.log(marker.distanceMatrice[117][118],marker.distanceMatrice[35][118])
 
     return (
-        <MapContainer center={[-128, 128]} zoom={2} crs={L.CRS.Simple} minZoom={0} maxZoom={6} maxBoundsViscosity={1.0} id='map'>
+        <MapContainer center={[-128, 128]} zoom={2} crs={L.CRS.Simple} minZoom={0} maxZoom={6} maxBoundsViscosity={1.0} id='map' zoomControl={false}>
             <TileLayer
                 url="/tiles/{z}/{x}/{y}.png"
             />
+            <ZoomControl position="topright" />
             {marker.coll.map(m => (
                 <Marker
                     key={"marker" + m.id}
