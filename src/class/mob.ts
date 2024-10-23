@@ -32,8 +32,7 @@ export default class mob implements marker,markerInterface,mobInterface{
     public createIcon() {
         const icon = new Icon({
             iconUrl: this.imageLink,
-            iconSize: [40,40],
-            // className: "truc"
+            iconSize: [40,40]
         })
 
         return icon;

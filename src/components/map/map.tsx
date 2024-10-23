@@ -17,20 +17,24 @@ interface MapProps {
 function Map({ selectedMobs }: MapProps) {
     const [mapKey, setMapKey] = useState(0);
 
+    // Function to find the nearest path of mobs from a starting point
     function findNearestMobPath(start:TP, unvisited:mob[]){
         let path: (TP|mob)[] = [start];
         let current: TP|mob = start;
         let totalDistance = 0;
 
         while (unvisited.length > 0) {
+            // Find the nearest unvisited mob
             let nextMob = unvisited.reduce((begin, end) => {
                 return marker.distanceMatrice[current.id][end.id] < marker.distanceMatrice[current.id][begin.id] ? end : begin;
             }, unvisited[0]);
 
+            // If the distance to the next mob is greater than the distance back to start, break
             if (marker.distanceMatrice[current.id][nextMob.id] > marker.distanceMatrice[start.id][nextMob.id]) {
                 break;
             }
 
+            // Remove the visited mob from unvisited list
             unvisited = unvisited.filter(mob => mob !== nextMob);
             path.push(nextMob);
             totalDistance += marker.distanceMatrice[current.id][nextMob.id];
@@ -41,12 +45,14 @@ function Map({ selectedMobs }: MapProps) {
     }
 
     useEffect(() => {
+        // Reset collections and matrices
         mob.coll = [];
         marker.coll = marker.coll.filter(m => !(m instanceof mob));
         line.coll = [];
         marker.distanceMatrice = [];
         marker.linkMatrice = [];
 
+        // Create new mobs based on selected mob types
         selectedMobs.forEach(mobName => {
             mobData.forEach((mobData)=>{
                 if(mobData.name === mobName){
@@ -57,6 +63,7 @@ function Map({ selectedMobs }: MapProps) {
 
         marker.createMatrice();
 
+        // For each teleport point, find paths to nearby mobs
         TP.coll.forEach(tp => {
             let unvisited = tp.getNearestMobs();
             const paths = [];
@@ -74,7 +81,7 @@ function Map({ selectedMobs }: MapProps) {
                 console.error('Max iterations reached. Possible infinite loop detected.');
             }
         
-            //Link all TPs and mobs in the paths
+            // Link all TPs and mobs in the paths
             paths.forEach(({ path }) => {
                 for (let i = 0; i < path.length - 1; i++) {
                     const begin = path[i];
@@ -90,9 +97,11 @@ function Map({ selectedMobs }: MapProps) {
             });
         })
 
+        // Trigger re-render of the map
         setMapKey(prevKey => prevKey + 1);
     }, [selectedMobs]);
 
+    // Component to handle map click events
     const LocationMarker = () => {
         useMapEvents({
             click(e) {
@@ -103,6 +112,7 @@ function Map({ selectedMobs }: MapProps) {
         return null;
     };
 
+    // Handler for checkbox changes
     const handleCheckboxChange = (id:number) => () => {
         marker.coll[id].done = !marker.coll[id].done;
         localStorage.setItem(String(id), String(marker.coll[id].done));
